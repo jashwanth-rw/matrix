@@ -19,7 +19,11 @@ export default function MapSelect() {
     }];
     return (
         <div className='mt-2 mx-5'>
-            <div className="flex flex-row justify-end items-center space-x-4">
+           <div className='flex items-center justify-between  mx-2 '>
+            <div>
+                Your Agents
+            </div>
+           <div className="flex flex-row justify-end items-center space-x-4">
             <button className="btn btn-secondary"> Progress 5%</button>
             <p className='bold'>1000 points</p>
             <select className="select w-full max-w-xs" value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)}>
@@ -30,6 +34,7 @@ export default function MapSelect() {
                 <option>German</option>
                 <option>Italian</option>
             </select> </div>
+           </div>
 
             <h1>Recent</h1>
             <div className='flex space-x-4'>
