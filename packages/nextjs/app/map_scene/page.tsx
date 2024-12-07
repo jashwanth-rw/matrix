@@ -1,16 +1,80 @@
 "use client";
 
+import { useState } from "react";
 import { toast } from "react-toastify";
-import Chat from "~~/components/chat";
+import Chat from "~~/components/Chat";
 
-export default function Map_scene() {
+const MapScene = () => {
+  const [userPosition, setUserPosition] = useState({ x: 0, y: 0 });
+  const dotMatrix = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, "X", 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, "X", 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, "X", 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, "X", 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, "X", 0, 0, 0],
+  ];
+
+  const handleKeyPress = (event: KeyboardEvent) => {
+    const newX = userPosition.x;
+    const newY = userPosition.y;
+    switch (event.key) {
+      case "ArrowUp":
+        if (newY > 0) {
+            updateUserPosition(-1,0)
+        }
+        break;
+      case "ArrowDown":
+        if (newY < dotMatrix.length - 1) {
+            updateUserPosition(1,0)
+        }
+        break;
+      case "ArrowLeft":
+        if (newX > 0) {
+            updateUserPosition(0,-1)
+        }
+        break;
+      case "ArrowRight":
+        if (newX < dotMatrix[0].length - 1) {
+            updateUserPosition(0,1)
+        }
+        break;
+    }
+  };
+  const updateUserPosition = (x: number, y: number) => {
+    const newX = userPosition.x + x;
+    const newY = userPosition.y + y;
+    if (newX >= 0 && newX < dotMatrix[0].length && newY >= 0 && newY < dotMatrix.length) {
+      setUserPosition({ x: newX, y: newY });
+    }
+  }
+  const handleKeyboardNavChange = (e) => {
+    if (e.target.checked) {
+      window.addEventListener("keydown", handleKeyPress);
+    } else {
+      window.removeEventListener("keydown", handleKeyPress);
+    }
+  };
+
   return (
     <div className="flex flex-row justify-start items-stretch mt-2 h-screen gap-2">
       {/* Left section */}
       <div className="w-3/5 h-full">
         <div className="card w-full h-full border p-0">
-          <div className="card-body h-full">
-            <h2 className="card-title bg-green-200 h-full flex items-center justify-center">Card 1</h2>
+          <div className="card-body h-full flex items-center justify-center">
+            <div className="grid grid-cols-10 gap-1">
+              {dotMatrix.map((row, rowIndex) => (
+                <div key={rowIndex} className="flex flex-col">
+                  {row.map((cell, cellIndex) => (
+                    <div key={cellIndex} className={`w-10 h-10 ${cell === "X" ? "bg-red-500" : userPosition.x === cellIndex && userPosition.y === rowIndex ? "bg-green-500" : "bg-gray-200"}`}></div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -34,30 +98,7 @@ export default function Map_scene() {
                   type="checkbox"
                   id="keyboardNav"
                   className="mr-2 cursor-pointer"
-                  onChange={e => {
-                    const handleKeyPress = (event: KeyboardEvent) => {
-                      switch (event.key) {
-                        case "ArrowUp":
-                          alert("Moving Up!");
-                          break;
-                        case "ArrowDown":
-                          alert("Moving Down!");
-                          break;
-                        case "ArrowLeft":
-                          alert("Moving Left!");
-                          break;
-                        case "ArrowRight":
-                          alert("Moving Right!");
-                          break;
-                      }
-                    };
-
-                    if (e.target.checked) {
-                      window.addEventListener("keydown", handleKeyPress);
-                    } else {
-                      window.removeEventListener("keydown", handleKeyPress);
-                    }
-                  }}
+                  onChange={handleKeyboardNavChange}
                 />
                 <label htmlFor="keyboardNav" className="text-sm cursor-pointer">
                   Enable keyboard navigation (↑,↓,←,→)
@@ -66,7 +107,7 @@ export default function Map_scene() {
               <div className="flex flex-col items-center gap-1">
                 <button
                   className="p-2 bg-gray-100 rounded-full transition-colors"
-                  onClick={() => alert("Moving Up!")}
+                  onClick={() => updateUserPosition(-1,0)}
                   title="Move Up"
                 >
                   <svg
@@ -82,7 +123,7 @@ export default function Map_scene() {
                 <div className="flex gap-1">
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => alert("Moving Left!")}
+                    onClick={() => updateUserPosition(0,-1)}
                     title="Move Left"
                   >
                     <svg
@@ -97,7 +138,7 @@ export default function Map_scene() {
                   </button>
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => alert("Moving Down!")}
+                    onClick={() => updateUserPosition(1,0)}
                     title="Move Down"
                   >
                     <svg
@@ -112,7 +153,7 @@ export default function Map_scene() {
                   </button>
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => alert("Moving Right!")}
+                    onClick={() => updateUserPosition(0,1)}
                     title="Move Right"
                   >
                     <svg
@@ -134,3 +175,5 @@ export default function Map_scene() {
     </div>
   );
 }
+
+export default MapScene;
