@@ -7,12 +7,14 @@ export default function NewAgent() {
   const [apiKey, setApiKey] = useState("");
   const [description, setDescription] = useState("");
   const [inputOutputPairs, setInputOutputPairs] = useState([{ input: "", output: "" }]);
+  const [showAllImages, setShowAllImages] = useState(false);
 
-  const preloadedImages = [
-    "https://imgcdn.stablediffusionweb.com/2024/4/4/d4a384e8-35f7-40df-bf6c-3c9ea21f07a5.jpg",
-    "https://imgcdn.stablediffusionweb.com/2024/11/17/4d7dfe9c-2cba-445a-af74-d974d3275a63.jpg",
-    "https://imgcdn.stablediffusionweb.com/2024/10/21/a914a10c-22f6-49b7-b668-a1686bed1738.jpg",
-  ];
+  const preloadedImages = [];
+  for (let i = 1; i <= 28; i++) {
+    preloadedImages.push(
+      `https://github.com/AmitChigare/matrixx/blob/main/output_cropped_images/box_${i}.png?raw=true`,
+    );
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -75,8 +77,8 @@ export default function NewAgent() {
           <label className="label">
             <span className="label-text">Or Select Preloaded Image</span>
           </label>
-          <div className="grid grid-cols-2 gap-4">
-            {preloadedImages.map((img, index) => (
+          <div className="grid grid-cols-3 gap-4">
+            {preloadedImages.slice(0, 5).map((img, index) => (
               <div
                 key={index}
                 className={`cursor-pointer border-2 rounded-lg overflow-hidden h-24 ${
@@ -87,9 +89,44 @@ export default function NewAgent() {
                 <img src={img} alt={`Preloaded ${index + 1}`} className="w-full h-full object-cover" />
               </div>
             ))}
+            <div
+              className="cursor-pointer border-2 border-dashed rounded-lg overflow-hidden h-24 flex items-center justify-center"
+              onClick={() => setShowAllImages(true)}
+            >
+              <span>Show All</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {showAllImages && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 w-[80vw] h-[80vh] overflow-y-auto">
+            <div className="flex justify-between mb-4">
+              <h2 className="text-xl font-bold">All Images</h2>
+              <button className="btn btn-sm btn-circle" onClick={() => setShowAllImages(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-8 gap-1">
+              {preloadedImages.map((img, index) => (
+                <div
+                  key={index}
+                  className={`cursor-pointer border-2 rounded-lg overflow-hidden h-40 ${
+                    selectedImage === img ? "border-primary" : "border-transparent"
+                  }`}
+                  onClick={() => {
+                    setSelectedImage(img);
+                    setShowAllImages(false);
+                  }}
+                >
+                  <img src={img} alt={`Preloaded ${index + 1}`} className="w-1/2 h-1/2 object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-6">
         <div className="form-control">
@@ -145,19 +182,21 @@ export default function NewAgent() {
           </div>
         ))}
 
-        <button className="btn btn-secondary w-full mb-4" onClick={addInputOutputPair}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          Add Input/Output Pair
-        </button>
+        <div className="flex justify-end">
+          <button className="btn btn-secondary w-[12rem] mb-4 self-center" onClick={addInputOutputPair}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            add input/output
+          </button>
+        </div>
 
         <button className="btn btn-primary w-full" onClick={handleSubmit}>
           Create Agent
