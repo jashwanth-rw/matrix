@@ -30,6 +30,7 @@
     "node": ">=18.18.0"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.1",
     "react-speech-recognition": "^3.10.0",
     "react-toastify": "^10.0.6"
   }
