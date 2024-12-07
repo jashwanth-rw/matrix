@@ -3,11 +3,7 @@
 @import "tailwindcss/utilities";
 
 /* Import Pixelify Sans Font */
-@font-face {
-  font-family: 'Pixelify Sans';
-  src: url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
-  font-display: swap;
-}
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
 
 :root,
 [data-theme] {
@@ -16,11 +12,9 @@
 
 body {
   min-height: 100vh;
-  font-family: 'Pixelify Sans', monospace !important; /* Changed to monospace fallback */
+  font-family: "Pixelify Sans", sans-serif !important; /* Apply the font globally */
   font-optical-sizing: auto;
   font-style: normal;
-  -webkit-font-smoothing: antialiased; /* Added for better font rendering */
-  -moz-osx-font-smoothing: grayscale; /* Added for better font rendering */
 }
 
 h1,
@@ -29,18 +23,15 @@ h3,
 h4 {
   margin-bottom: 0.5rem;
   line-height: 1;
-  font-family: 'Pixelify Sans', monospace; /* Changed to monospace fallback */
-  font-weight: 700; /* Added explicit font weight */
+  font-family: "Pixelify Sans", sans-serif; /* Ensure headers use Pixelify Sans */
 }
 
 p {
   margin: 1rem 0;
-  font-family: 'Pixelify Sans', monospace; /* Added explicit font family */
 }
 
 .btn {
   @apply shadow-md;
-  font-family: 'Pixelify Sans', monospace !important; /* Added for buttons */
 }
 
 .btn.btn-ghost {
@@ -49,9 +40,7 @@ p {
 
 /* Custom Utility Classes */
 .pixelify {
-  font-family: 'Pixelify Sans', monospace !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Pixelify Sans", sans-serif;
 }
 
 .font-weight-400 {
