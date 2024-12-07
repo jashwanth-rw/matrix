@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Chat from "~~/components/Chat";
 
 const MapScene = () => {
   const [userPosition, setUserPosition] = useState({ x: 0, y: 0 });
+  const [nearbyPlayers, setNearbyPlayers] = useState<{ x: number; y: number; id: number }[]>([]);
+  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
+
   const dotMatrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, "X", 0, 0, 0, 0, 0, 0, 0, 0],
@@ -19,40 +22,70 @@ const MapScene = () => {
     [0, 0, 0, 0, 0, 0, "X", 0, 0, 0],
   ];
 
+  useEffect(() => {
+    // Check for nearby players whenever user position changes
+    const checkNearbyPlayers = () => {
+      const nearby: { x: number; y: number; id: number }[] = [];
+
+      // Check surrounding cells (1 cell radius)
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          const checkX = userPosition.x + i;
+          const checkY = userPosition.y + j;
+
+          if (checkX >= 0 && checkX < dotMatrix[0].length && checkY >= 0 && checkY < dotMatrix.length) {
+            if (dotMatrix[checkY][checkX] === "X") {
+              nearby.push({
+                x: checkX,
+                y: checkY,
+                id: checkX + checkY * dotMatrix[0].length,
+              });
+            }
+          }
+        }
+      }
+      setNearbyPlayers(nearby);
+    };
+
+    checkNearbyPlayers();
+  }, [userPosition]);
+
   const handleKeyPress = (event: KeyboardEvent) => {
     const newX = userPosition.x;
     const newY = userPosition.y;
     switch (event.key) {
       case "ArrowUp":
         if (newY > 0) {
-            updateUserPosition(-1,0)
+          updateUserPosition(-1, 0);
         }
         break;
       case "ArrowDown":
         if (newY < dotMatrix.length - 1) {
-            updateUserPosition(1,0)
+          updateUserPosition(1, 0);
         }
         break;
       case "ArrowLeft":
         if (newX > 0) {
-            updateUserPosition(0,-1)
+          updateUserPosition(0, -1);
         }
         break;
       case "ArrowRight":
         if (newX < dotMatrix[0].length - 1) {
-            updateUserPosition(0,1)
+          updateUserPosition(0, 1);
         }
         break;
     }
   };
+
   const updateUserPosition = (x: number, y: number) => {
     const newX = userPosition.x + x;
     const newY = userPosition.y + y;
     if (newX >= 0 && newX < dotMatrix[0].length && newY >= 0 && newY < dotMatrix.length) {
       setUserPosition({ x: newX, y: newY });
     }
-  }
-  const handleKeyboardNavChange = (e) => {
+  };
+
+  const handleKeyboardNavChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       window.addEventListener("keydown", handleKeyPress);
     } else {
@@ -70,14 +103,24 @@ const MapScene = () => {
               {dotMatrix.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex flex-col">
                   {row.map((cell, cellIndex) => (
-                    <div key={cellIndex} className={`w-10 h-10 ${cell === "X" ? "bg-gray-200" : userPosition.x === cellIndex && userPosition.y === rowIndex ? "bg-gray-200" : "bg-gray-200"}`}>
+                    <div
+                      key={cellIndex}
+                      className={`w-10 h-10 ${cell === "X" ? "bg-gray-200" : userPosition.x === cellIndex && userPosition.y === rowIndex ? "bg-gray-200" : "bg-gray-200"}`}
+                    >
                       {userPosition.x === cellIndex && userPosition.y === rowIndex && (
-                        <img src="https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_1.png?raw=true" alt="Player" className="w-full h-full object-cover" />
+                        <img
+                          src="https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_1.png?raw=true"
+                          alt="Player"
+                          className="w-full h-full object-cover"
+                        />
                       )}
                       {cell === "X" && (
-                        <img src={`https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_${Math.floor(Math.random() * (28 - 2 + 1)) + 2}.png?raw=true`} alt="Player" className="w-full h-full object-cover" />
+                        <img
+                          src={`https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_${Math.floor(Math.random() * (28 - 2 + 1)) + 2}.png?raw=true`}
+                          alt="Player"
+                          className="w-full h-full object-cover"
+                        />
                       )}
-
                     </div>
                   ))}
                 </div>
@@ -92,7 +135,25 @@ const MapScene = () => {
         {/* Chat component */}
         <div className="flex-2 h-3/5 overflow-hidden">
           <div className="card w-full h-full border">
-            <Chat />
+            {selectedPlayer ? (
+              <Chat />
+            ) : (
+              <div className="p-4">
+                <h3 className="text-lg mb-4">Nearby Players</h3>
+                <div className="flex flex-wrap gap-4">
+                  {nearbyPlayers.map(player => (
+                    <button
+                      key={player.id}
+                      onClick={() => setSelectedPlayer(player.id)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-full animate-pulse hover:bg-blue-600 transition-colors"
+                    >
+                      Player {player.id}
+                    </button>
+                  ))}
+                  {nearbyPlayers.length === 0 && <p className="text-gray-500">No players nearby</p>}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -115,7 +176,7 @@ const MapScene = () => {
               <div className="flex flex-col items-center gap-1">
                 <button
                   className="p-2 bg-gray-100 rounded-full transition-colors"
-                  onClick={() => updateUserPosition(-1,0)}
+                  onClick={() => updateUserPosition(-1, 0)}
                   title="Move Up"
                 >
                   <svg
@@ -131,7 +192,7 @@ const MapScene = () => {
                 <div className="flex gap-1">
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => updateUserPosition(0,-1)}
+                    onClick={() => updateUserPosition(0, -1)}
                     title="Move Left"
                   >
                     <svg
@@ -146,7 +207,7 @@ const MapScene = () => {
                   </button>
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => updateUserPosition(1,0)}
+                    onClick={() => updateUserPosition(1, 0)}
                     title="Move Down"
                   >
                     <svg
@@ -161,7 +222,7 @@ const MapScene = () => {
                   </button>
                   <button
                     className="p-2 bg-gray-100 rounded-full transition-colors"
-                    onClick={() => updateUserPosition(0,1)}
+                    onClick={() => updateUserPosition(0, 1)}
                     title="Move Right"
                   >
                     <svg
@@ -182,6 +243,6 @@ const MapScene = () => {
       </div>
     </div>
   );
-}
+};
 
 export default MapScene;
