@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import MapSelect from "~~/components/MapSelect";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -12,7 +13,7 @@ const Home: NextPage = () => {
     <>
       {
           connectedAddress ?
-          <div> hfadiv </div> :
+          <MapSelect/>:
         <div className="flex flex-row justify-between items-center m-10">
         <div className="flex-1">
           <div>
