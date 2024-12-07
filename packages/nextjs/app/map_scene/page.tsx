@@ -66,11 +66,19 @@ const MapScene = () => {
       <div className="w-3/5 h-full">
         <div className="card w-full h-full border p-0">
           <div className="card-body h-full flex items-center justify-center">
-            <div className="grid grid-cols-10 gap-1">
+            <div className="grid grid-cols-10 gap-0">
               {dotMatrix.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex flex-col">
                   {row.map((cell, cellIndex) => (
-                    <div key={cellIndex} className={`w-10 h-10 ${cell === "X" ? "bg-red-500" : userPosition.x === cellIndex && userPosition.y === rowIndex ? "bg-green-500" : "bg-gray-200"}`}></div>
+                    <div key={cellIndex} className={`w-10 h-10 ${cell === "X" ? "bg-gray-200" : userPosition.x === cellIndex && userPosition.y === rowIndex ? "bg-gray-200" : "bg-gray-200"}`}>
+                      {userPosition.x === cellIndex && userPosition.y === rowIndex && (
+                        <img src="https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_1.png?raw=true" alt="Player" className="w-full h-full object-cover" />
+                      )}
+                      {cell === "X" && (
+                        <img src={`https://github.com/jashwanth-rw/matrix/blob/main/output_cropped_images/box_${Math.floor(Math.random() * (28 - 2 + 1)) + 2}.png?raw=true`} alt="Player" className="w-full h-full object-cover" />
+                      )}
+
+                    </div>
                   ))}
                 </div>
               ))}
