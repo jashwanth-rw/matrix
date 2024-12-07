@@ -16,7 +16,7 @@ export const GetPlayerChainID = (address: any) => {
 export const GetPlayerChainDetails = ({ address, chainId }: any) => {
   const { data, isLoading, error } = useReadContract({
     abi: ChainMatrixABI,
-    address: getAddressByChainId(chainId),
+    address: getAddressByChainId(chainId) as `0x${string}`,
     functionName: "playerChainData",
     args: [address as `0x${string}`],
   });
