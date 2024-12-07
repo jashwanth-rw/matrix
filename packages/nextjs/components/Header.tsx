@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useAccount } from "wagmi";
 
 type HeaderMenuLink = {
   label: string;
@@ -36,6 +37,7 @@ export const menuLinks: HeaderMenuLink[] = [
 ];
 
 export const HeaderMenuLinks = () => {
+
   const pathname = usePathname();
 
   return (
@@ -65,12 +67,19 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
+  const { address: connectedAddress } = useAccount();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
+  const avatars = [
+    { id: 1, src: "https://s2.coinmarketcap.com/static/img/coins/200x200/11841.png" ,name: "arbitrum"},
+    { id: 2, src: "https://s2.coinmarketcap.com/static/img/coins/200x200/28321.png" ,name: "polygon"},
+    { id: 3, src: "https://s2.coinmarketcap.com/static/img/coins/200x200/11840.png",name: "optimisum" },
+    { id: 4, src: "https://s2.coinmarketcap.com/static/img/exchanges/200x200/89.png",name: "base" },
+  ];
 
   return (
     <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
@@ -110,10 +119,28 @@ export const Header = () => {
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end flex-grow mr-4">
+       
+      {connectedAddress && 
+      <div className="navbar-end w-auto lg:w-1/2">
+
+     <div className="avatar-group -space-x-6 rtl:space-x-reverse items-center">
+        Live on
+            {avatars.map((avatar) => (
+              <div key={avatar.id} className="avatar">
+                <div className="w-8">
+                  <img src={avatar.src} />
+                </div>
+              </div>
+            ))}
+          </div> 
+
+      <div className="flex mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
       </div>
+      </div>}
+
     </div>
-  );
-};
+  )
+}
+

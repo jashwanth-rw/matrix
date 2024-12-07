@@ -3,13 +3,18 @@
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
+import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import MapSelect from "~~/components/MapSelect";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center m-10">
+      {
+          connectedAddress ?
+          <MapSelect/>:
+        <div className="flex flex-row justify-between items-center m-10">
         <div className="flex-1">
           <div>
             <div className="flex flex-col justify-center items-center">
@@ -17,14 +22,7 @@ const Home: NextPage = () => {
               <p className="text-xl">Hope you&apos;re doing well! This is a sample restaurant.</p>
             </div>
             <div className="flex flex-col justify-center items-center w-full">
-              <button className="flex items-center mx-10 py-3 px-[100px] rounded-full text-white bg-blue-500 text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <img
-                  src="https://images.mirror-media.xyz/publication-images/cgqxxPdUFBDjgKna_dDir.png"
-                  alt="Supra Testnet Logo"
-                  className="w-6 h-6 mr-2 animate-pulse"
-                />
-                Connect Wallet
-              </button>
+                <RainbowKitCustomConnectButton />
 
               <span className="my-2 my-3">or</span>
               <button className="flex items-center mx-10 py-3 px-6 rounded-full text-black bg-gray-200 text-lg hover:text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 border border-red-500">
@@ -45,7 +43,7 @@ const Home: NextPage = () => {
             className="w-full aspect-4:3 rounded-xl"
           />
         </div>
-      </div>
+      </div>}
     </>
   );
 };
