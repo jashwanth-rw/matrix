@@ -31,8 +31,13 @@ export const RainbowKitCustomConnectButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                 <button onClick={openConnectModal} type="button" className="flex items-center mx-10 py-3 px-[100px] rounded-full text-white bg-blue-500 text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <img
+                  src="https://images.mirror-media.xyz/publication-images/cgqxxPdUFBDjgKna_dDir.png"
+                  alt="Supra Testnet Logo"
+                  className="w-6 h-6 mr-2 animate-pulse"
+                />
+                Connect wallet
                   </button>
                 );
               }
