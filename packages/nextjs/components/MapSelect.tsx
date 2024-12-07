@@ -41,7 +41,7 @@ export default function MapSelect() {
   return (
     <div className="mt-2 mx-5">
       <div className="flex flex-row justify-end items-center space-x-4">
-        <button className="btn btn-secondary"> Progress 5%</button>
+        <button className="btn btn-secondary" onClick={() => router.push(`/progress`)}> Progress 5%</button>
         <p className="bold">1000 points</p>
         <select
           className="select w-full max-w-xs"
