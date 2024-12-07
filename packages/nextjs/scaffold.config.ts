@@ -1,7 +1,6 @@
+import { Chain } from "@rainbow-me/rainbowkit";
 import * as chains from "viem/chains";
-import {
-  Chain
-} from '@rainbow-me/rainbowkit';
+
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
@@ -12,21 +11,21 @@ export type ScaffoldConfig = {
 
 const socketVM = {
   id: 7_625_382,
-  name: 'SocketVM',
-  iconUrl: 'socket.jpeg',
-  iconBackground: '#fff',
-  nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+  name: "SocketVM",
+  iconUrl: "socket.jpeg",
+  iconBackground: "#fff",
+  nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
   rpcUrls: {
-    default: { http: ['https://rpc-socket-composer-testnet.t.conduit.xyz'] },
+    default: { http: ["https://rpc-socket-composer-testnet.t.conduit.xyz"] },
   },
   blockExplorers: {
-    default: { name: 'OffChainVM', url: 'https://explorer-socket-composer-testnet.t.conduit.xyz/' },
-  }
+    default: { name: "OffChainVM", url: "https://explorer-socket-composer-testnet.t.conduit.xyz/" },
+  },
 } as const satisfies Chain;
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [socketVM],
+  targetNetworks: [socketVM, chains.arbitrumSepolia, chains.optimismSepolia, chains.baseSepolia],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)

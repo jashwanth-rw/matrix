@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { ChainMatrixABI } from "../../abi/ChainMatrix";
 import { GlobalMatrixGatewayABI } from "../../abi/GlobalMatrixGateway";
 import { GlobalMatrixGateway, getAddressByChainId } from "../../contracts/DeployedAddress";
 import { useReadContract } from "wagmi";
+
+const predefinedChainIds = [421614, 11155420, 84532];
 
 export const GetPlayerChainID = (address: any) => {
   const { data, isLoading, error } = useReadContract({
@@ -16,9 +19,10 @@ export const GetPlayerChainID = (address: any) => {
 export const GetPlayerChainDetails = ({ address, chainId }: any) => {
   const { data, isLoading, error } = useReadContract({
     abi: ChainMatrixABI,
-    address: getAddressByChainId(chainId) as `0x${string}`,
+    address: getAddressByChainId(chainId),
     functionName: "playerChainData",
-    args: [address as `0x${string}`],
+    chainId: chainId,
+    args: [address! as `0x${string}`],
   });
   return { data, isLoading, error };
 };
@@ -28,6 +32,7 @@ export const GetChatMessages = ({ addressSender, addressReceiver, chainId }: any
     abi: ChainMatrixABI,
     address: getAddressByChainId(chainId),
     functionName: "getChatMessages",
+    chainId: chainId,
     args: [addressSender as `0x${string}`, addressReceiver as `0x${string}`],
   });
   return { data, isLoading, error };
@@ -48,16 +53,17 @@ export const GetCloseProximityPlaters = () => {
     abi: GlobalMatrixGatewayABI,
     address: GlobalMatrixGateway,
     functionName: "getCloseProximityPlayers",
+    args: [BigInt(1)],
   });
   return { data, isLoading, error };
 };
 
-export const GetMapDetails = (mapId: any) => {
+export const GetMapDetails = () => {
   const { data, isLoading, error } = useReadContract({
     abi: GlobalMatrixGatewayABI,
     address: GlobalMatrixGateway,
     functionName: "getMap",
-    args: [mapId],
+    args: [BigInt(1)],
   });
   return { data, isLoading, error };
 };
@@ -92,28 +98,41 @@ export const GetNumberOfPlayersOnChain = (chainId: number) => {
   return { data, isLoading, error };
 };
 
-// Example to loop through players' data across chains
-export const FetchPlayersFromAllChains = async () => {
-  const chainIds = [421614, 11155420, 84532]; // Add more chain IDs if needed
-  const playersByChain: Record<number, any[]> = {}; // Store results for each chain
+// Hook to fetch player data from all predefined chains
+export const FetchPlayersFromAllChains = () => {
+  const [playersByChain, setPlayersByChain] = useState<Record<number, any[]>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  for (const chainId of chainIds) {
-    const { data, isLoading, error } = GetNumberOfPlayersOnChain(chainId);
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const results: Record<number, any[]> = {};
 
-    if (isLoading) {
-      console.log(`Loading data for chain ID ${chainId}...`);
-      continue;
-    }
+        for (const chainId of predefinedChainIds) {
+          const { data, isLoading: chainLoading, error: chainError } = GetNumberOfPlayersOnChain(chainId);
 
-    if (error) {
-      console.error(`Error fetching data for chain ID ${chainId}: ${error}`);
-      continue;
-    }
+          if (chainLoading) {
+            console.log(`Loading data for chain ID ${chainId}...`);
+            continue;
+          }
 
-    if (data) {
-      console.log(`Data for chain ID ${chainId}:`, data);
-      playersByChain[chainId] = Array.isArray(data) ? data : [data]; // Ensure data is an array
-    }
-  }
-  return playersByChain;
+          if (data) {
+            console.log(`Data for chain ID ${chainId}:`, data);
+            results[chainId] = Array.isArray(data) ? data : [data]; // Ensure data is an array
+          }
+        }
+
+        setPlayersByChain(results);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        setIsLoading(false);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
+
+  return { data: playersByChain, isLoading, error };
 };

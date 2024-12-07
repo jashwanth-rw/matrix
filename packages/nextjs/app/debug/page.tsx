@@ -1,11 +1,21 @@
-"use client"
+"use client";
 
+import { useEffect } from "react";
 import { DebugContracts } from "./_components/DebugContracts";
 import type { NextPage } from "next";
-import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-import { GetPlayerChainID, GetPlayerChainDetails, GetChatMessages, GetPlayerLocation, GetCloseProximityPlaters, GetMapDetails, GetProfileImage, GetNumberOfPlayersOnChain, FetchPlayersFromAllChains } from "~~/hooks/contracts/Get";
-import { useEffect } from "react";
 import { useAccount } from "wagmi";
+import {
+  FetchPlayersFromAllChains,
+  GetChatMessages,
+  GetCloseProximityPlaters,
+  GetMapDetails,
+  GetNumberOfPlayersOnChain,
+  GetPlayerChainDetails,
+  GetPlayerChainID,
+  GetPlayerLocation,
+  GetProfileImage,
+} from "~~/hooks/contracts/Get";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 // export const metadata = getMetadata({
 //   title: "Debug Contracts",
@@ -14,32 +24,85 @@ import { useAccount } from "wagmi";
 
 const Debug: NextPage = () => {
   const { address: connectedAddress } = useAccount();
-  
-  const { data: playerChainID, isLoading: loadingPlayerChainID, error: playerChainIDError } = GetPlayerChainID(connectedAddress);
-  const { data: playerChainDetails, isLoading: loadingPlayerChainDetails, error: playerChainDetailsError } = GetPlayerChainDetails({ address: connectedAddress, chainId: 84532 });
-  const { data: chatMessages, isLoading: loadingChatMessages, error: chatMessagesError } = GetChatMessages({ addressSender: connectedAddress, addressReceiver: connectedAddress, chainId: 84532 });
-  const { data: playerLocation, isLoading: loadingPlayerLocation, error: playerLocationError } = GetPlayerLocation(connectedAddress);
-  const { data: closeProximityPlayers, isLoading: loadingCloseProximityPlayers, error: closeProximityPlayersError } = GetCloseProximityPlaters();
-  const { data: mapDetails, isLoading: loadingMapDetails, error: mapDetailsError } = GetMapDetails(84532);
-  const { data: profileImage, isLoading: loadingProfileImage, error: profileImageError } = GetProfileImage(connectedAddress);
-  const { data: numberOfPlayersOnChain, isLoading: loadingNumberOfPlayersOnChain, error: numberOfPlayersOnChainError } = GetNumberOfPlayersOnChain(84532);
-  const { data: playersFromAllChains, isLoading: loadingPlayersFromAllChains, error: playersFromAllChainsError } = FetchPlayersFromAllChains();
-  
-  useEffect(()=>{console.log("playerChainID is changed",playerChainID,typeof(playerChainID))},[playerChainID])
-  useEffect(()=>{console.log("playerChainDetails is changed",playerChainDetails,typeof(playerChainDetails))},[playerChainDetails])
-  useEffect(()=>{console.log("chatMessages is changed",chatMessages,typeof(chatMessages))},[chatMessages])
-  useEffect(()=>{console.log("playerLocation is changed",playerLocation,typeof(playerLocation))},[playerLocation])
-  useEffect(()=>{console.log("closeProximityPlayers is changed",closeProximityPlayers,typeof(closeProximityPlayers))},[closeProximityPlayers])
-  useEffect(()=>{console.log("mapDetails is changed",mapDetails,typeof(mapDetails))},[mapDetails])
-  useEffect(()=>{console.log("profileImage is changed",profileImage,typeof(profileImage))},[profileImage])
-  useEffect(()=>{console.log("numberOfPlayersOnChain is changed",numberOfPlayersOnChain,typeof(numberOfPlayersOnChain))},[numberOfPlayersOnChain])
-  useEffect(()=>{console.log("playersFromAllChains is changed",playersFromAllChains,typeof(playersFromAllChains))},[playersFromAllChains])
-  
+
+  const {
+    data: playerChainID,
+    isLoading: loadingPlayerChainID,
+    error: playerChainIDError,
+  } = GetPlayerChainID(connectedAddress);
+  const {
+    data: playerChainDetails,
+    isLoading: loadingPlayerChainDetails,
+    error: playerChainDetailsError,
+  } = GetPlayerChainDetails({ address: connectedAddress, chainId: 421614 });
+  const {
+    data: chatMessages,
+    isLoading: loadingChatMessages,
+    error: chatMessagesError,
+  } = GetChatMessages({
+    addressSender: connectedAddress,
+    addressReceiver: "0x0133eb00D73847A81E08F1b410700CC963947657",
+    chainId: 421614,
+  });
+  const {
+    data: playerLocation,
+    isLoading: loadingPlayerLocation,
+    error: playerLocationError,
+  } = GetPlayerLocation(connectedAddress);
+  const {
+    data: closeProximityPlayers,
+    isLoading: loadingCloseProximityPlayers,
+    error: closeProximityPlayersError,
+  } = GetCloseProximityPlaters();
+  const { data: mapDetails, isLoading: loadingMapDetails, error: mapDetailsError } = GetMapDetails();
+  const {
+    data: profileImage,
+    isLoading: loadingProfileImage,
+    error: profileImageError,
+  } = GetProfileImage(connectedAddress);
+  const {
+    data: numberOfPlayersOnChain,
+    isLoading: loadingNumberOfPlayersOnChain,
+    error: numberOfPlayersOnChainError,
+  } = GetNumberOfPlayersOnChain(421614);
+  const {
+    data: playersFromAllChains,
+    isLoading: loadingPlayersFromAllChains,
+    error: playersFromAllChainsError,
+  } = FetchPlayersFromAllChains();
+
+  useEffect(() => {
+    console.log("playerChainID is changed", playerChainID, typeof playerChainID);
+  }, [playerChainID]);
+  useEffect(() => {
+    console.log("playerChainDetails is changed", playerChainDetails, typeof playerChainDetails);
+  }, [playerChainDetails]);
+  useEffect(() => {
+    console.log("chatMessages is changed", chatMessages, typeof chatMessages);
+  }, [chatMessages]);
+  useEffect(() => {
+    console.log("playerLocation is changed", playerLocation, typeof playerLocation);
+  }, [playerLocation]);
+  useEffect(() => {
+    console.log("closeProximityPlayers is changed", closeProximityPlayers, typeof closeProximityPlayers);
+  }, [closeProximityPlayers]);
+  useEffect(() => {
+    console.log("mapDetails is changed", mapDetails, typeof mapDetails);
+  }, [mapDetails]);
+  useEffect(() => {
+    console.log("profileImage is changed", profileImage, typeof profileImage);
+  }, [profileImage]);
+  useEffect(() => {
+    console.log("numberOfPlayersOnChain is changed", numberOfPlayersOnChain, typeof numberOfPlayersOnChain);
+  }, [numberOfPlayersOnChain]);
+  useEffect(() => {
+    console.log("playersFromAllChains is changed", playersFromAllChains, typeof playersFromAllChains);
+  }, [playersFromAllChains]);
+
   return (
     <>
       <DebugContracts />
       <div className="text-center mt-8 bg-secondary p-10">
-        
         {loadingPlayerChainID ? (
           <p>Loading Player Chain ID...</p>
         ) : playerChainIDError ? (
@@ -47,15 +110,15 @@ const Debug: NextPage = () => {
         ) : (
           <p>Player Chain ID: {Number(playerChainID)}</p>
         )}
-        
-        {loadingPlayerChainDetails ? (
+
+        {/* {loadingPlayerChainDetails ? (
           <p>Loading Player Chain Details...</p>
         ) : playerChainDetailsError ? (
           <p>Error: {playerChainDetailsError.message}</p>
         ) : (
           <p>Player Chain Details: {JSON.stringify(playerChainDetails)}</p>
-        )}
-        
+        )} */}
+
         {loadingChatMessages ? (
           <p>Loading Chat Messages...</p>
         ) : chatMessagesError ? (
@@ -63,15 +126,15 @@ const Debug: NextPage = () => {
         ) : (
           <p>Chat Messages: {JSON.stringify(chatMessages)}</p>
         )}
-        
+
         {loadingPlayerLocation ? (
           <p>Loading Player Location...</p>
         ) : playerLocationError ? (
           <p>Error: {playerLocationError.message}</p>
         ) : (
-          <p>Player Location: {playerLocation[0]}</p>
+          <p>Player Location: {Number(playerLocation![0])}</p>
         )}
-        
+
         {loadingCloseProximityPlayers ? (
           <p>Loading Close Proximity Players...</p>
         ) : closeProximityPlayersError ? (
@@ -79,15 +142,15 @@ const Debug: NextPage = () => {
         ) : (
           <p>Close Proximity Players: {JSON.stringify(closeProximityPlayers)}</p>
         )}
-        
-        {loadingMapDetails ? (
+
+        {/* {loadingMapDetails ? (
           <p>Loading Map Details...</p>
         ) : mapDetailsError ? (
           <p>Error: {mapDetailsError.message}</p>
         ) : (
           <p>Map Details: {JSON.stringify(mapDetails)}</p>
-        )}
-        
+        )} */}
+
         {loadingProfileImage ? (
           <p>Loading Profile Image...</p>
         ) : profileImageError ? (
@@ -95,19 +158,15 @@ const Debug: NextPage = () => {
         ) : (
           <p>Profile Image: {JSON.stringify(profileImage)}</p>
         )}
-        
+
         {loadingNumberOfPlayersOnChain ? (
           <p>Loading Number of Players on Chain...</p>
-        ) : numberOfPlayersOnChainError ? (
-          <p>Error: {numberOfPlayersOnChainError.message}</p>
         ) : (
-          <p>Number of Players on Chain: {JSON.stringify(numberOfPlayersOnChain)}</p>
+          <p>Number of Players on Chain: {Number(numberOfPlayersOnChain)}</p>
         )}
-        
+
         {loadingPlayersFromAllChains ? (
           <p>Loading Players from All Chains...</p>
-        ) : playersFromAllChainsError ? (
-          <p>Error: {playersFromAllChainsError.message}</p>
         ) : (
           <p>Players from All Chains: {JSON.stringify(playersFromAllChains)}</p>
         )}

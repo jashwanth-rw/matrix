@@ -5,11 +5,8 @@ const OptimismSepolia = "0x4ec61E20968B7E1BEDe1b4f5922D738FC57F1347";
 const BaseSepolia = "0xD1f054993B189aCd1761e3b7a31840C6e14eD10c";
 
 export function getAddressByChainId(chainId: number): string | undefined {
-  const chainToAddressMap: Record<number, string> = {
-    421614: ArbitrumSepolia,
-    11155420: OptimismSepolia,
-    84532: BaseSepolia,
-  };
-
-  return chainToAddressMap[chainId];
+  if (chainId == 421614) return ArbitrumSepolia;
+  if (chainId == 11155420) return OptimismSepolia;
+  if (chainId == 84532) return BaseSepolia;
+  return ArbitrumSepolia;
 }
