@@ -34,6 +34,7 @@ To get started with Scaffold-ETH 2, follow the steps below:
 cd my-dapp-example
 yarn install
 ```
+
 2. Start your NextJS app:
 
 ```
@@ -41,7 +42,6 @@ yarn start
 ```
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
-
 
 ## Documentation
 
