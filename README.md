@@ -1,5 +1,12 @@
 # Decentralized Cross-Chain Multiplayer Matrix
 
+###Contracts Deployed on :
+
+Socket OffchainVM :
+
+- MatrixDeployer: 0x86AFF9fDE176247fA09Dc8f1b691DB8C9318282b
+- GlobalMatrixGateway: 0x26EBbDA4c2ee4C7f8FD83D2df1a35247F0Ec18C3
+
 ## Overview
 
 The **Decentralized Cross-Chain Multiplayer Matrix** is a blockchain-based multiplayer platform that allows players from multiple blockchain networks to interact within a shared global map. Each chain has its own local contract, which stores player-specific data, while the global contract maintains the shared game map and ensures consistent synchronization of player data across chains.
@@ -163,10 +170,3 @@ This project is licensed under the **GPL-3.0 License**.
 ---
 
 **Let’s build the future of cross-chain decentralized gaming together!**
-
-Contracts Deployed on :
-
-Socket OffchainVM :
-
-- MatrixDeployer: 0x86AFF9fDE176247fA09Dc8f1b691DB8C9318282b
-- GlobalMatrixGateway: 0x26EBbDA4c2ee4C7f8FD83D2df1a35247F0Ec18C3
