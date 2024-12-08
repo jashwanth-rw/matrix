@@ -1,56 +1,165 @@
-# 🏗 Scaffold-ETH 2
+# Decentralized Cross-Chain Multiplayer Matrix
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+## Overview
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+The **Decentralized Cross-Chain Multiplayer Matrix** is a blockchain-based multiplayer platform that allows players from multiple blockchain networks to interact within a shared global map. Each chain has its own local contract, which stores player-specific data, while the global contract maintains the shared game map and ensures consistent synchronization of player data across chains.
 
-⚙️ Built using NextJS, RainbowKit, Wagmi, Viem, and Typescript.
+### Key Features
 
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+- **Cross-Chain Integration**: Players can join the game from any supported blockchain.
+- **Global Map Management**: A unified map is stored on the global contract, accessible to all players regardless of their chain of origin.
+- **Player Proximity & Interaction**: Players can interact with others near their in-game location, even if they are on different chains.
+- **Efficient Data Handling**: Each chain stores minimal player data, while global data is maintained on the main contract.
+- **Secure Communication**: Chat requests and messages between players ensure proximity-based validation and consent.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+---
 
-## Requirements
+## Contracts
 
-Before you begin, you need to install the following tools:
+### 1. **Global Contract**
 
-- [Node (>= v18.18)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+The global contract handles shared data and game logic across all chains. It includes:
 
-## Quickstart
+- A global map with player locations.
+- Logic for player interactions such as chatting and proximity detection.
+- Functions to manage cross-chain updates and synchronization.
 
-To get started with Scaffold-ETH 2, follow the steps below:
+### 2. **Local Chain Contract**
 
-1. Install dependencies if it was skipped in CLI:
+Each chain has a local contract that handles:
 
-```
-cd my-dapp-example
-yarn install
-```
+- Player registration for that specific chain.
+- Minimal storage of player data such as their chain ID and address.
+- Relaying updates to the global contract when a player moves or interacts.
 
-2. Start your NextJS app:
+---
 
-```
-yarn start
-```
+## Goals
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+- To enable a truly decentralized and cross-chain multiplayer gaming experience.
+- To ensure scalability by delegating localized operations to individual chains while maintaining global consistency.
+- To promote interoperability between different blockchain ecosystems.
 
-## Documentation
+---
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+## Use Cases
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+### 1. **Cross-Chain Gaming**
 
-## Contributing to Scaffold-ETH 2
+A player joins from Chain A, while another joins from Chain B. Both can interact on the same global map, ensuring a seamless gaming experience.
 
-We welcome contributions to Scaffold-ETH 2!
+### 2. **Proximity-Based Interaction**
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Players in close proximity on the map can initiate chats, trade virtual assets, or engage in cooperative missions.
+
+### 3. **Dynamic Map Updates**
+
+As players move across the map, their locations are updated globally, allowing real-time interactions irrespective of their originating chain.
+
+### 4. **Decentralized Communication**
+
+Chat requests are validated based on player proximity, ensuring secure and meaningful interactions.
+
+---
+
+## How It Works
+
+### Player Registration
+
+1. A player registers on their local chain contract with minimal data.
+2. The local contract relays their existence to the global contract, updating their presence on the global map.
+
+### Game Map Management
+
+- The global contract maintains a single map where all players' positions are stored.
+- Players from any chain can view and interact with this map.
+
+### Communication Between Chains
+
+- The global contract serves as the central point for data exchange, ensuring that updates from local chains are reflected globally.
+- Local contracts ensure data is efficiently managed within their respective chains.
+
+---
+
+###**Interaction History and Optimistic Index**
+
+# Example Section
+
+![Flow 1](./output_cropped_images/flow1.png)
+
+- **Purpose**: Tracks the history of interactions and their context.
+- **Key Components**:
+- Interaction data flows through an "Agent."
+- The system includes a redactor for refining and contextualizing interactions.
+- The "Optimistic Index" maintains a reference for processing outcomes.
+- **Flow**:
+- Interaction data is processed by the agent, influenced by the Optimistic Index, and contextualized before being stored.
+
+###**Image Processing with Lossless Hashing**
+
+![Flow 2](./output_cropped_images/flow2.png)
+
+- **Purpose**: Converts user location data into image representations using hashing.
+- **Key Components**:
+- Input data includes:
+- `user_address1` and `user_address2` (with location coordinates).
+- A lossless hashing function transforms input data into hash values.
+- Hash values are converted into image pixels to create a visual representation.
+- **Flow**:
+- User data → Hashing function → Image creation.
+
+###**Interaction and Rewarding Rules**
+
+![Flow 3](./output_cropped_images/flow3.png)
+
+- **Purpose**: Governs how interactions are structured and rewards are distributed.
+- **Key Components**:
+- **Agents**:
+- Business owner agents.
+- **Rules**:
+- Interaction rules, receiving rules, and rewarding rules.
+- **Offerings**:
+- Business owners offer services or products based on predefined rules.
+- **Flow**:
+- Agents follow predefined interaction and rewarding rules to offer and reward services.
+
+###**Base Optimism**
+
+![Flow 4](./output_cropped_images/flow4.png)
+
+- **Purpose**: Represents the foundational optimism used in decision-making and interaction flows.
+- **Flow**: Acts as the core layer that supports optimistic decision-making across processes.
+
+---
+
+## Future Enhancements
+
+- **NFT Integration**: Players can trade or display NFTs as in-game assets.
+- **Cross-Chain Asset Transfer**: Enable players to move assets or rewards between chains.
+- **Custom Maps**: Allow community-generated maps with unique gameplay mechanics.
+
+---
+
+## Development Notes
+
+### Key Challenges Addressed
+
+1. **Cross-Chain Consistency**: Synchronization between local and global contracts ensures data accuracy.
+2. **Efficient Storage**: Player data is minimized at the local level to reduce storage costs.
+3. **Secure Interactions**: Chat and location-based features validate player states for secure gameplay.
+
+---
+
+## Contributions
+
+We welcome contributions to improve scalability, interoperability, and player experiences. Please refer to our [contribution guide](#) for details.
+
+---
+
+### License
+
+This project is licensed under the **GPL-3.0 License**.
+
+---
+
+**Let’s build the future of cross-chain decentralized gaming together!**
