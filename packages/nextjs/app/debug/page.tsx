@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect } from "react";
+// export const metadata = getMetadata({
+//   title: "Debug Contracts",
+//   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
+// });
+import { useState } from "react";
 import { DebugContracts } from "./_components/DebugContracts";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
+import { useGasPrice } from "wagmi";
 import {
   FetchPlayersFromAllChains,
   GetChatMessages,
   GetCloseProximityPlaters,
+  GetGasPrices,
   GetMapDetails,
   GetNumberOfPlayersOnChain,
   GetPlayerChainDetails,
@@ -16,11 +23,6 @@ import {
   GetProfileImage,
 } from "~~/hooks/contracts/Get";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-
-// export const metadata = getMetadata({
-//   title: "Debug Contracts",
-//   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
-// });
 
 const Debug: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -70,7 +72,10 @@ const Debug: NextPage = () => {
     isLoading: loadingPlayersFromAllChains,
     error: playersFromAllChainsError,
   } = FetchPlayersFromAllChains();
-
+  const gasData = GetGasPrices();
+  useEffect(() => {
+    console.log("gas details", gasData);
+  }, [gasData]);
   useEffect(() => {
     console.log("playerChainID is changed", playerChainID, typeof playerChainID);
   }, [playerChainID]);

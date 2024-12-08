@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ChainMatrixABI } from "../../abi/ChainMatrix";
 import { GlobalMatrixGatewayABI } from "../../abi/GlobalMatrixGateway";
 import { GlobalMatrixGateway, getAddressByChainId } from "../../contracts/DeployedAddress";
-import { useReadContract } from "wagmi";
+import { useGasPrice, useReadContract } from "wagmi";
 
 const predefinedChainIds = [421614, 11155420, 84532];
 
@@ -135,4 +135,22 @@ export const FetchPlayersFromAllChains = () => {
   }, []);
 
   return { data: playersByChain, isLoading, error };
+};
+
+export const GetGasPrices = () => {
+  const gasPrices = predefinedChainIds.map(chainId => {
+    const { data: gasPrice, isLoading, error } = useGasPrice({ chainId });
+    return { chainId, gasPrice, isLoading, error };
+  });
+
+  // Filter and sort the gas prices (ignore if loading or error)
+  const sortedGasPrices = gasPrices
+    .filter(item => !item.isLoading && !item.error && item.gasPrice) // Ensure valid data
+    .map(item => ({
+      chainId: item.chainId,
+      gasPrice: parseFloat(item.gasPrice!.toString()), // Convert BigInt to a number
+    }))
+    .sort((a, b) => a.gasPrice - b.gasPrice); // Sort by gas price (ascending)
+
+  return sortedGasPrices;
 };
