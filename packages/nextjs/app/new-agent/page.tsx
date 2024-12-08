@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { GetGasPrices } from "~~/hooks/contracts/Get";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -14,24 +15,36 @@ export default function NewAgent() {
   const [showAllImages, setShowAllImages] = useState(false);
   const [showGasModal, setShowGasModal] = useState(false);
   const [selectedGasPrice, setSelectedGasPrice] = useState<number | null>(null);
-
+  const gasPrices = GetGasPrices();
   const gasData = [
     {
+      chainName: "ABC",
       chainId: 11155420,
       gasPrice: 1000251,
+      img: "https://s2.coinmarketcap.com/static/img/coins/200x200/11840.png",
     },
     {
+      chainName: "MNO",
       chainId: 84532,
       gasPrice: 1000271,
+      img: "https://s2.coinmarketcap.com/static/img/exchanges/200x200/89.png",
     },
     {
+      chainName: "XYZ",
       chainId: 421614,
       gasPrice: 100000000,
+      img: "https://s2.coinmarketcap.com/static/img/coins/200x200/11841.png",
     },
   ];
 
+  // Update gasData based on gasPrices
+  const updatedGasData = gasData.map(item => {
+    const updatedPrice = gasPrices.find(price => price.chainId === item.chainId);
+    return updatedPrice ? { ...item, gasPrice: updatedPrice.gasPrice } : item;
+  });
+
   const chartData = {
-    labels: gasData.map(d => `Chain ${d.chainId}`),
+    labels: gasData.map(d => d.chainName),
     datasets: [
       {
         label: "Gas Price",
@@ -205,13 +218,14 @@ export default function NewAgent() {
                 <Bar data={chartData} options={chartOptions} />
               </div>
               <div className="flex justify-around mt-4">
-                {gasData.map(data => (
+                {updatedGasData.map(data => (
                   <button
                     key={data.chainId}
-                    className={`btn ${selectedGasPrice === data.gasPrice ? "btn-primary" : "btn-outline"}`}
+                    className={`btn ${selectedGasPrice === data.gasPrice ? "btn-primary" : "btn-outline"} flex items-center gap-2`}
                     onClick={() => handleGasSelect(data.gasPrice)}
                   >
-                    Chain {data.chainId}
+                    <img src={data.img} alt={data.chainName} className="w-6 h-6 rounded-full" />
+                    {data.chainId}
                   </button>
                 ))}
               </div>
